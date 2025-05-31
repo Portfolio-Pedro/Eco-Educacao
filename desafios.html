@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Desafios - Desafio Sustentável</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <header>
+    <h1>Desafio Sustentável</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="desafios.html" class="active">Desafios</a>
+      <a href="turmas.html">Turmas</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Desafios</h2>
+    <table id="desafios-table">
+      <thead>
+        <tr>
+          <th>Desafio</th>
+          <th>Descrição</th>
+          <th>Ação</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Desafios inseridos via JavaScript -->
+      </tbody>
+    </table>
+  </main>
+
+  <footer>
+    <small>© 2025 Desafio Sustentável</small>
+  </footer>
+
+  <script>
+    const desafios = [
+      { id: 1, titulo: 'Economizar Água', descricao: 'Feche a torneira ao escovar os dentes.' },
+      { id: 2, titulo: 'Reduzir Plástico', descricao: 'Use garrafa reutilizável.' },
+      { id: 3, titulo: 'Reciclagem', descricao: 'Separe lixo reciclável em casa.' },
+    ];
+
+    const tabela = document.querySelector('#desafios-table tbody');
+
+    desafios.forEach(desafio => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${desafio.titulo}</td>
+        <td>${desafio.descricao}</td>
+        <td><button class="complete-btn">Concluir</button></td>
+      `;
+
+      const btn = tr.querySelector('button');
+      btn.addEventListener('click', () => {
+        tr.classList.add('completed');
+        btn.remove();
+        const td = tr.querySelector('td:last-child');
+        td.innerHTML = '<span class="thanks-message">✅ Obrigado por contribuir!</span>';
+      });
+
+      tabela.appendChild(tr);
+    });
+  </script>
+</body>
+</html>

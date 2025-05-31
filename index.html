@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Desafio Sustentável - Home</title>
+  <link rel="stylesheet" href="styles.css" />
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+</head>
+<body>
+  <header>
+    
+    <h1>Desafio Sustentável</h1>
+    <nav>
+      <a href="desafios.html">Desafios</a>
+      <a href="turmas.html">Turmas</a>
+      <a href="alunos.html">Ranking Alunos</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="intro">
+      <h2>Bem-vindo ao Desafio Sustentável</h2>
+      <p>Participe de desafios para incentivar ações conscientes na sua escola.  
+      Compita com sua turma e veja quem está fazendo mais pela sustentabilidade!</p>
+      <a href="login.html" class="btn">Entrar</a>
+    </section>
+
+    <section class="ranking-preview">
+      <h3>Ranking das Turmas (Top 3)</h3>
+      <ul id="rank-turmas">
+        <li>Carregando...</li>
+      </ul>
+    </section>
+
+    <section class="ranking-preview">
+      <h3>Ranking dos Alunos (Top 3)</h3>
+      <ul id="rank-alunos">
+        <li>Carregando...</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <small>© 2025 Desafio Sustentável</small>
+  </footer>
+
+  <script>
+    // Configuração Supabase (substitua pela sua URL e anon key)
+     document.addEventListener('DOMContentLoaded', async () => {
+    // Supabase já está carregado como 'supabase' global, crie o cliente assim:
+    const SUPABASE_URL = 'https://ljmaflnjeglmyxmmblfp.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxqbWFmbG5qZWdsbXh4bW1ibGZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg0NjkzODIsImV4cCI6MjA2NDA0NTM4Mn0.z2aPVzSMVrFRjaTdGQygnLrRQq-OsLcecNurDM0Ody8';
+
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const { data: { session } } = await supabaseClient.auth.getSession();
+
+    if (session) {
+      // Remove link "Login" do menu
+      const loginMenuLink = document.querySelector('nav a[href="index.html"]');
+      if (loginMenuLink) loginMenuLink.remove();
+
+      // Remove botão "Entrar / Registrar" da seção
+      const entrarBtn = document.querySelector('.intro a.btn[href="index.html"]');
+      if (entrarBtn) entrarBtn.remove();
+    }
+  });
+
+
+    // Função para carregar ranking das turmas (salas)
+    async function carregarRankingTurmas() {s
+      const { data: schools, error } = await supabase
+        .rpc('get_school_ranking'); // vamos criar essa RPC depois
+
+      const rankEl = document.getElementById('rank-turmas');
+      rankEl.innerHTML = '';
+
+      if(error) {
+        rankEl.innerHTML = '<li>Erro ao carregar ranking das turmas.</li>';
+        console.error(error);
+        return;
+      }
+
+      if(!schools || schools.length === 0){
+        rankEl.innerHTML = '<li>Nenhuma turma cadastrada ainda.</li>';
+        return;
+      }
+
+      schools.slice(0,3).forEach(({name, total_points}, i) => {
+        const li = document.createElement('li');
+        li.textContent = `${i+1}º - ${name} (${total_points} pontos)`;
+        rankEl.appendChild(li);
+      });
+    }
+
+    // Função para carregar ranking dos alunos
+    async function carregarRankingAlunos() {
+      const { data: alunos, error } = await supabase
+        .rpc('get_user_ranking'); // vamos criar essa RPC depois
+
+      const rankEl = document.getElementById('rank-alunos');
+      rankEl.innerHTML = '';
+
+      if(error) {
+        rankEl.innerHTML = '<li>Erro ao carregar ranking dos alunos.</li>';
+        console.error(error);
+        return;
+      }
+
+      if(!alunos || alunos.length === 0){
+        rankEl.innerHTML = '<li>Nenhum aluno cadastrado ainda.</li>';
+        return;
+      }
+
+      alunos.slice(0,3).forEach(({name, total_points}, i) => {
+        const li = document.createElement('li');
+        li.textContent = `${i+1}º - ${name} (${total_points} pontos)`;
+        rankEl.appendChild(li);
+      });
+    }
+
+    // Inicializa
+    carregarRankingTurmas();
+    carregarRankingAlunos();
+  </script>
+</body>
+</html>

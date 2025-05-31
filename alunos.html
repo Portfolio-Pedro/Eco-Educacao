@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ranking de Alunos - Consumo Consciente</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Ranking de Alunos</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="turmas.html">Ranking por Turmas</a>
+      <a href="desafios.html">Desafios</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="ranking-container">
+      <table id="ranking-alunos">
+        <thead>
+          <tr>
+            <th>Posição</th>
+            <th>Aluno</th>
+            <th>Sala</th>
+            <th>Pontos</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Ranking preenchido por JS -->
+        </tbody>
+      </table>
+      <p id="loading-message">Carregando ranking...</p>
+      <p id="error-message" style="color: red; display:none;"></p>
+    </section>
+  </main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="alunos.js"></script>
+
+
+
+
+
+
+</body>
+</html>

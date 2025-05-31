@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ranking das Turmas - Desafio Sustentável</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Desafio Sustentável</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="desafios.html">Desafios</a>
+      <a href="alunos.html">Ranking Alunos</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="turmas-section">
+      <h2>Ranking por Turmas</h2>
+      <table id="turmas-table">
+        <thead>
+          <tr>
+            <th>Posição</th>
+            <th>Turma</th>
+            <th>Desafios Completados</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td colspan="3">Carregando...</td></tr>
+        </tbody>
+      </table>
+      <p id="message"></p>
+    </section>
+  </main>
+
+  <footer>
+    <small>© 2025 Desafio Sustentável</small>
+  </footer>
+
+  <script>
+    const SUPABASE_URL = 'https://ljmaflnjeglmyxmmblfp.supabase.co' 
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxqbWFmbG5qZWdsbXl4bW1ibGZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg0NjkzODIsImV4cCI6MjA2NDA0NTM4Mn0.z2aPVzSMVrFRjaTdGQygnLrRQq-OsLcecNurDM0Ody8';
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const turmasTableBody = document.querySelector('#turmas-table tbody');
+    const messageEl = document.getElementById('message');
+
+    async function loadTurmasRanking() {
+      // Query para somar os desafios completados por sala
+      const { data, error } = await supabase.rpc('rank_turmas_challenges');
+
+      if (error) {
+        turmasTableBody.innerHTML = '<tr><td colspan="3">Erro ao carregar ranking.</td></tr>';
+        messageEl.textContent = error.message;
+        return;
+      }
+      if (!data || !data.length) {
+        turmasTableBody.innerHTML = '<tr><td colspan="3">Nenhuma turma registrada.</td></tr>';
+        return;
+      }
+
+      turmasTableBody.innerHTML = '';
+      data.forEach(({ position, school_name, total_points }) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${position}</td>
+          <td>${school_name}</td>
+          <td>${total_points}</td>
+        `;
+        turmasTableBody.appendChild(tr);
+      });
+    }
+
+    window.onload = loadTurmasRanking;
+  </script>
+</body>
+</html>
