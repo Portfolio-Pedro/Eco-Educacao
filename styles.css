@@ -1,3 +1,52 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 100%;
+}
+
+body {
+  font-family: sans-serif;
+  line-height: 1.6;
+  padding: 1rem;
+}
+
+img, video, iframe {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+@media (max-width: 1024px) {
+  html {
+    font-size: 95%;
+  }
+}
+
+@media (max-width: 768px) {
+  html {
+    font-size: 90%;
+  }
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 85%;
+    padding: 0.5rem;
+  }
+}
+
+
 /* Reset básico */
 * {
   margin: 0; padding: 0; box-sizing: border-box;
